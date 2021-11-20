@@ -3,6 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_barcode.xml" value="0.12395833333333334" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_connecting.xml" value="0.12395833333333334" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_live_data.xml" value="0.12916666666666668" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_main.xml" value="0.3098958333333333" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_on_boarding.xml" value="0.16" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_recognise.xml" value="0.176" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_recording.xml" value="0.136" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/forgot_page.xml" value="0.176" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/fragment_on_boarding.xml" value="0.12395833333333334" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/login_page.xml" value="0.2" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/signup_page.xml" value="0.16799999999999998" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/menu/menu_main.xml" value="0.264" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/menu/menu_pager.xml" value="0.152" />
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/files/pdiot-practical/pdiotapp/app/src/main/res/layout/activity_live_data.xml" value="0.2" />
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/files/pdiot-practical/pdiotapp/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/files/pdiot-practical/pdiotapp/app/src/main/res/layout/activity_on_boarding.xml" value="0.17753623188405798" />

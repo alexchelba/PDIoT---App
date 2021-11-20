@@ -36,7 +36,6 @@ class LiveDataActivity : AppCompatActivity() {
 
     var time = 0f
     lateinit var allRespeckData: LineData
-
     lateinit var allThingyData: LineData
 
     lateinit var respeckChart: LineChart

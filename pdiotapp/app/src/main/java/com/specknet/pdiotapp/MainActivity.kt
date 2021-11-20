@@ -7,11 +7,13 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.UserManager
 import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.Snackbar
@@ -20,6 +22,7 @@ import com.specknet.pdiotapp.bluetooth.ConnectingActivity
 import com.specknet.pdiotapp.live.LiveDataActivity
 import com.specknet.pdiotapp.onboarding.OnBoardingActivity
 import com.specknet.pdiotapp.recognition.RecogniseActivity
+import com.specknet.pdiotapp.userActivities.LoginActivity
 import com.specknet.pdiotapp.utils.Constants
 import com.specknet.pdiotapp.utils.Utils
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var pairingButton: Button
     lateinit var recordButton: Button
     lateinit var recogniseButton: Button
+    lateinit var welcomeText: TextView
 
     // permissions
     lateinit var permissionAlertDialog: AlertDialog.Builder
@@ -62,7 +66,8 @@ class MainActivity : AppCompatActivity() {
             val introIntent = Intent(this, OnBoardingActivity::class.java)
             startActivity(introIntent)
         }
-
+        welcomeText = findViewById(R.id.textView2)
+        welcomeText.text = "Hey, " + intent.extras!!.getString("username") + ". What do you want to do?"
         liveProcessingButton = findViewById(R.id.live_button)
         pairingButton = findViewById(R.id.ble_button)
         recordButton = findViewById(R.id.record_button)
@@ -273,7 +278,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(introIntent)
             return true
         }
-
+        if(id == R.id.log_out) {
+            intent.extras!!.clear()
+            val accountsIntent = Intent(this, LoginActivity::class.java)
+            startActivity(accountsIntent)
+            return true
+        }
         return super.onOptionsItemSelected(item)
     }
 

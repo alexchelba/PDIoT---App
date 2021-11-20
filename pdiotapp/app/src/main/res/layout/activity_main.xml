@@ -10,13 +10,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_anchor="@+id/constraintLayout"
+        app:layout_anchorGravity="center">
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100px"
+            android:layout_marginTop="200px"
             android:text="I want to"
             app:layout_constraintBottom_toTopOf="@+id/record_button"
             app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +29,7 @@
             android:id="@+id/record_button"
             android:layout_width="550px"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100px"
+            android:layout_marginTop="50px"
             android:background="#03A9F4"
             android:text="Record data"
             android:textColor="#FFFFFF"
@@ -41,27 +43,28 @@
             android:id="@+id/live_button"
             android:layout_width="550px"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100px"
+            android:layout_marginTop="50px"
             android:background="#03A9F4"
             android:text="Watch live processing"
             android:textColor="#FFFFFF"
-            app:layout_constraintBottom_toTopOf="@+id/ble_button"
+            app:layout_constraintBottom_toTopOf="@id/recognise_button"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/record_button" />
-
 
         <Button
             android:id="@+id/ble_button"
             android:layout_width="550px"
             android:layout_height="wrap_content"
-            android:layout_marginTop="38dp"
-            android:layout_marginBottom="200dp"
+            android:layout_marginTop="50px"
+            android:layout_marginBottom="200px"
             android:background="#03A9F4"
             android:text="Connect sensors"
             android:textColor="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recognise_button" />
 
@@ -69,7 +72,7 @@
             android:id="@+id/recognise_button"
             android:layout_width="550px"
             android:layout_height="wrap_content"
-            android:layout_marginTop="38dp"
+            android:layout_marginTop="50px"
             android:background="#03A9F4"
             android:text="live recognition"
             android:textColor="#FFFFFF"
