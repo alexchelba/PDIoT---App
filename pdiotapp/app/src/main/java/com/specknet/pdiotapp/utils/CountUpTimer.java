@@ -26,6 +26,14 @@ public abstract class CountUpTimer {
         handler.removeMessages(MSG);
     }
 
+    public long get_elapsedTime(long time) {
+        return SystemClock.elapsedRealtime() - time;
+    }
+
+    public long get_currentTime() {
+        return SystemClock.elapsedRealtime();
+    }
+
     public void reset() {
         synchronized (this) {
             base = SystemClock.elapsedRealtime();

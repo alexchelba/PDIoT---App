@@ -12,6 +12,9 @@ import com.specknet.pdiotapp.MainActivity
 import com.specknet.pdiotapp.R
 import com.specknet.pdiotapp.loginHelpers.InputValidation
 import com.specknet.pdiotapp.userDatabase.DatabaseHelper
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
 
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
@@ -134,9 +137,18 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
             val user = databaseHelper.getUser(textInputEditTextEmail.text.toString().trim { it <= ' ' })
             val name = user.username
-            databaseHelper.updateUserSesh(user, true)
+            val email = user.email
+
+            /*
+            val file = File(getExternalFilesDir(null)!!.absolutePath)
+            val userFile = File(file, email)
+            if(!userFile.exists()) userFile.mkdirs()
+            */
+
+            //databaseHelper.updateUserSesh(user, true)
             val accountsIntent = Intent(activity, MainActivity::class.java)
             accountsIntent.putExtra("username", name)
+            accountsIntent.putExtra("email", email)
             emptyInputEditText()
             startActivity(accountsIntent)
 

@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import com.specknet.pdiotapp.R
 import com.specknet.pdiotapp.loginHelpers.InputValidation
 import com.specknet.pdiotapp.userDatabase.DatabaseHelper
+import java.io.File
 
 
 class RegisterActivity : AppCompatActivity(), View.OnClickListener {
@@ -147,7 +148,13 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                 password = textInputEditTextPassword.text.toString().trim()
             )
 
+            val file = File(getExternalFilesDir(null)!!.absolutePath)
+            val userFile = File(file, user.email)
+            if(!userFile.exists()) userFile.mkdirs()
+
             databaseHelper.addUser(user)
+
+
 
             // Snack Bar to show success message that record saved successfully
             Toast.makeText(this, "Registration successful. Please go back to login page", Toast.LENGTH_SHORT).show()

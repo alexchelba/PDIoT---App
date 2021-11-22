@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.Snackbar
 import com.specknet.pdiotapp.bluetooth.BluetoothSpeckService
 import com.specknet.pdiotapp.bluetooth.ConnectingActivity
+import com.specknet.pdiotapp.fileViewer.FileViewer
 import com.specknet.pdiotapp.live.LiveDataActivity
 import com.specknet.pdiotapp.onboarding.OnBoardingActivity
 import com.specknet.pdiotapp.recognition.RecogniseActivity
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var pairingButton: Button
     lateinit var recordButton: Button
     lateinit var recogniseButton: Button
+    lateinit var showFilesButton: Button
     lateinit var welcomeText: TextView
 
     // permissions
@@ -72,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         pairingButton = findViewById(R.id.ble_button)
         recordButton = findViewById(R.id.record_button)
         recogniseButton = findViewById(R.id.recognise_button)
+        showFilesButton = findViewById(R.id.showFilesButton)
 
         permissionAlertDialog = AlertDialog.Builder(this)
 
@@ -104,9 +107,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         recogniseButton.setOnClickListener {
-            val intent = Intent(this, RecogniseActivity::class.java)
-            startActivity(intent)
+            val intentr = Intent(this, RecogniseActivity::class.java)
+            intentr.putExtra("username", intent.extras!!.getString("username"))
+            intentr.putExtra("email", intent.extras!!.getString("email"))
+            startActivity(intentr)
         }
+
+        showFilesButton.setOnClickListener {
+            val intentr = Intent(this, FileViewer::class.java)
+            intentr.putExtra("email", intent.extras!!.getString("email"))
+            startActivity(intentr)
+        }
+
     }
 
     fun setupPermissions() {

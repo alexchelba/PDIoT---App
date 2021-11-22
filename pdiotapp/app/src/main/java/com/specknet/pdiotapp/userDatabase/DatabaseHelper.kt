@@ -28,6 +28,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         //Drop User Table if exist
         db.execSQL(DROP_USER_TABLE)
         // Create tables again
+        //db.close()
+        //SQLiteDatabase.deleteDatabase(File(DATABASE_NAME + ".db"))
         onCreate(db)
 
     }

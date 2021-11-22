@@ -107,6 +107,13 @@
             android:name=".userActivities.ForgetActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".fileViewer.FileViewer"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".utils.FileOpen"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -37,7 +37,7 @@
         android:layout_marginTop="75dp"
         android:layout_marginBottom="25dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@id/recognise_text"
+        app:layout_constraintBottom_toTopOf="@id/recog_count_up_timer_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/RecogButtons">
@@ -62,13 +62,13 @@
         android:id="@+id/recognise_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="25dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/respeck_graphs2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttons_container2">
+        app:layout_constraintTop_toBottomOf="@id/recog_count_up_timer_text">
 
         <TextView
             android:id="@+id/recogniser"
@@ -135,4 +135,16 @@
             android:layout_height="100dp" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/recog_count_up_timer_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="20dp"
+        android:text="Elapsed time : "
+        app:layout_constraintBottom_toTopOf="@+id/recognise_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttons_container2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,17 +4,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
-import android.os.Looper
+import android.os.*
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
@@ -23,83 +20,89 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.specknet.pdiotapp.R
 import com.specknet.pdiotapp.utils.Constants
+import com.specknet.pdiotapp.utils.CountUpTimer
 import com.specknet.pdiotapp.utils.RESpeckLiveData
 import com.specknet.pdiotapp.utils.ThingyLiveData
 import org.tensorflow.lite.Interpreter
-import java.io.FileInputStream
-import java.io.IOException
+import java.io.*
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.max
 
 
 class RecogniseActivity : AppCompatActivity() {
 
     private val TAG = "RecognisingActivity"
 
-    lateinit var startRecognisingButton: Button
-    lateinit var stopRecognisingButton: Button
-    lateinit var useRespeckButton: ToggleButton
-    lateinit var useThingyButton: ToggleButton
+    private lateinit var startRecognisingButton: Button
+    private lateinit var stopRecognisingButton: Button
+    private lateinit var useRespeckButton: ToggleButton
+    private lateinit var useThingyButton: ToggleButton
 
-    var respeckOn = false
-    var thingyOn = false
+    private var respeckOn = false
+    private var thingyOn = false
 
-    var useRespeck = false
-    var useThingy = false
+    private var useRespeck = false
+    private var useThingy = false
 
     private var mIsRespeckRecognising = false
     private var mIsThingyRecognising = false
-    lateinit var recogniser: TextView
+    private lateinit var recogniser: TextView
 
-    val respeckFeatureSize = 6
-    val thingyFeatureSize = 6
+    private val respeckFeatureSize = 6
+    private val thingyFeatureSize = 9
 
-    val windowSize = 30
-    val nr_classes = 5
-    lateinit var respeckWindow: Array<FloatArray>
-    lateinit var respeckWindowRow: FloatArray
-    lateinit var respeckCNN: Interpreter
+    private val windowSize = 30
+    private val nr_classes = 5
+    private lateinit var respeckWindow: Array<FloatArray>
+    private lateinit var respeckWindowRow: FloatArray
+    private lateinit var respeckCNN: Interpreter
 
-    lateinit var thingyWindow: Array<FloatArray>
-    lateinit var thingyWindowRow: FloatArray
-    lateinit var thingyCNN: Interpreter
+    private lateinit var thingyWindow: Array<FloatArray>
+    private lateinit var thingyWindowRow: FloatArray
+    private lateinit var thingyCNN: Interpreter
 
-    lateinit var str: String
-    var resCounter = 0
-    var thinCounter = 0
+    private lateinit var str: String
+    private var resCounter = 0
+    private var thinCounter = 0
 
 
 
     // global graph variables
-    lateinit var dataSet_res_accel_x: LineDataSet
-    lateinit var dataSet_res_accel_y: LineDataSet
-    lateinit var dataSet_res_accel_z: LineDataSet
+    private lateinit var dataSet_res_accel_x: LineDataSet
+    private lateinit var dataSet_res_accel_y: LineDataSet
+    private lateinit var dataSet_res_accel_z: LineDataSet
 
-    lateinit var dataSet_thingy_accel_x: LineDataSet
-    lateinit var dataSet_thingy_accel_y: LineDataSet
-    lateinit var dataSet_thingy_accel_z: LineDataSet
+    private lateinit var dataSet_thingy_accel_x: LineDataSet
+    private lateinit var dataSet_thingy_accel_y: LineDataSet
+    private lateinit var dataSet_thingy_accel_z: LineDataSet
 
 
-    var time = 0f
-    lateinit var allRespeckData: LineData
-    lateinit var allThingyData: LineData
+    private var time = 0f
+    private lateinit var allRespeckData: LineData
+    private lateinit var allThingyData: LineData
 
-    lateinit var respeckChart: LineChart
-    lateinit var thingyChart: LineChart
+    private lateinit var respeckChart: LineChart
+    private lateinit var thingyChart: LineChart
 
     // global broadcast receiver so we can unregister it
-    lateinit var respeckLiveUpdateReceiver: BroadcastReceiver
-    lateinit var thingyLiveUpdateReceiver: BroadcastReceiver
-    lateinit var looperRespeck: Looper
-    lateinit var looperThingy: Looper
+    private lateinit var respeckLiveUpdateReceiver: BroadcastReceiver
+    private lateinit var thingyLiveUpdateReceiver: BroadcastReceiver
+    private lateinit var looperRespeck: Looper
+    private lateinit var looperThingy: Looper
 
+    private lateinit var timer: TextView
+    private lateinit var countUpTimer: CountUpTimer
 
+    private var prevTime: Long = 0
+    private var initialTime: Long = 0
+    private lateinit var user_name : String
+    private lateinit var activity_map: MutableMap<String, Long>
 
-    val filterTestRespeck = IntentFilter(Constants.ACTION_RESPECK_LIVE_BROADCAST)
-    val filterTestThingy = IntentFilter(Constants.ACTION_THINGY_BROADCAST)
+    private val filterTestRespeck = IntentFilter(Constants.ACTION_RESPECK_LIVE_BROADCAST)
+    private val filterTestThingy = IntentFilter(Constants.ACTION_THINGY_BROADCAST)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,7 +121,10 @@ class RecogniseActivity : AppCompatActivity() {
         thingyWindowRow = FloatArray(thingyFeatureSize)
         thingyWindow = Array(windowSize) {thingyWindowRow}
 
-        thingyCNN = Interpreter(loadModelFile("model_basic.tflite"))
+        thingyCNN = Interpreter(loadModelFile("s1865457_model_thingie.tflite"))
+
+        activity_map = mutableMapOf()
+        user_name = intent.extras!!.getString("username").toString()
 
         // set up the broadcast receiver
         respeckLiveUpdateReceiver = object : BroadcastReceiver() {
@@ -132,7 +138,7 @@ class RecogniseActivity : AppCompatActivity() {
 
                     val liveData =
                         intent.getSerializableExtra(Constants.RESPECK_LIVE_DATA) as RESpeckLiveData
-                    //Log.d("Live", "onReceive: liveData = " + liveData)
+                    Log.d("Live", "onReceive: liveData = " + liveData)
 
                     updateData(liveData)
 
@@ -169,7 +175,7 @@ class RecogniseActivity : AppCompatActivity() {
 
                     val liveData =
                         intent.getSerializableExtra(Constants.THINGY_LIVE_DATA) as ThingyLiveData
-                    Log.d("Live", "onReceive: liveData = " + liveData)
+                    Log.d("Live", "onReceive: liveData = $liveData")
 
                     updateData(liveData)
 
@@ -194,6 +200,19 @@ class RecogniseActivity : AppCompatActivity() {
         val handlerThingy = Handler(looperThingy)
         this.registerReceiver(thingyLiveUpdateReceiver, filterTestThingy, null, handlerThingy)
 
+        timer = findViewById(R.id.recog_count_up_timer_text)
+        //timer.visibility = View.INVISIBLE
+
+        countUpTimer = object: CountUpTimer(1000) {
+            override fun onTick(elapsedTime: Long) {
+                val date = Date(elapsedTime)
+                val formatter = SimpleDateFormat("HH:mm:ss", Locale.UK)
+                formatter.timeZone = TimeZone.getTimeZone("GMT")
+                val dateFormatted = formatter.format(date)
+                val s = "Elapsed time : $dateFormatted"
+                timer.text = s
+            }
+        }
 
     }
 
@@ -218,7 +237,13 @@ class RecogniseActivity : AppCompatActivity() {
                 for (i in 0..respeckWindow.size - 2)
                     respeckWindow[i] = respeckWindow[i + 1]
                 respeckWindow[windowSize-1] = respeckWindowRow
+
                 str = predict(respeckWindow, thingyWindow)
+
+                val prevValue = activity_map.getOrElse(str, { 0 })
+                activity_map.put(str, prevValue + countUpTimer.get_elapsedTime(prevTime))
+                prevTime = countUpTimer._currentTime
+
                 resCounter-=1
             }
         }
@@ -237,6 +262,10 @@ class RecogniseActivity : AppCompatActivity() {
             thingyWindowRow[3]=liveData.gyro.x
             thingyWindowRow[4]=liveData.gyro.y
             thingyWindowRow[5]=liveData.gyro.z
+            thingyWindowRow[6]=liveData.mag.x
+            thingyWindowRow[7]=liveData.mag.y
+            thingyWindowRow[8]=liveData.mag.z
+
             if(thinCounter<windowSize) {
                 thingyWindow[thinCounter-1]=thingyWindowRow
             } else
@@ -246,6 +275,9 @@ class RecogniseActivity : AppCompatActivity() {
                     thingyWindow[windowSize-1] = thingyWindowRow
                     if(!useRespeck) {
                         str = predict(respeckWindow, thingyWindow)
+                        val prevValue = activity_map.getOrElse(str, { 0 })
+                        activity_map.put(str, prevValue + countUpTimer.get_elapsedTime(prevTime))
+                        prevTime = countUpTimer._currentTime
                     }
                     thinCounter-=1
                 }
@@ -341,14 +373,22 @@ class RecogniseActivity : AppCompatActivity() {
 
     private fun startRecognising() {
 
+        countUpTimer.start()
+        initialTime = countUpTimer._currentTime
+        prevTime = initialTime
         mIsRespeckRecognising = useRespeck
         mIsThingyRecognising = useThingy
     }
 
     private fun stopRecognising() {
 
-        //countUpTimer.stop()
-        //countUpTimer.reset()
+        countUpTimer.stop()
+        val totalTime = countUpTimer._currentTime - initialTime
+        countUpTimer.reset()
+        prevTime = 0
+        val s = "Elapsed time : "
+        timer.text = s
+
         str = "Recognition Result : "
         respeckWindowRow = FloatArray(respeckFeatureSize)
         respeckWindow = Array(windowSize){respeckWindowRow}
@@ -361,6 +401,8 @@ class RecogniseActivity : AppCompatActivity() {
         //Log.d(TAG, "stopRecognising " + respeckWindow.size)
         mIsThingyRecognising = false
         thinCounter=0
+
+        saveRecording(totalTime)
 
     }
 
@@ -405,10 +447,10 @@ class RecogniseActivity : AppCompatActivity() {
     private fun loadModelFile(tflite : String): MappedByteBuffer {
         val MODEL_ASSETS_PATH = tflite
         val assetFileDescriptor = assets.openFd(MODEL_ASSETS_PATH)
-        val fileInputStream = FileInputStream(assetFileDescriptor.getFileDescriptor())
-        val fileChannel = fileInputStream.getChannel()
+        val fileInputStream = FileInputStream(assetFileDescriptor.fileDescriptor)
+        val fileChannel = fileInputStream.channel
         val startoffset = assetFileDescriptor.startOffset
-        val declaredLength = assetFileDescriptor.getDeclaredLength()
+        val declaredLength = assetFileDescriptor.declaredLength
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startoffset, declaredLength)
     }
 
@@ -443,7 +485,81 @@ class RecogniseActivity : AppCompatActivity() {
         return ""
     }
 
-    fun setupCharts() {
+    private fun saveRecording(time : Long) {
+        val currentTime = System.currentTimeMillis()
+        var formattedDate = ""
+        try {
+            formattedDate = SimpleDateFormat("dd-MM-yyyy_HH-mm-ss", Locale.UK).format(Date())
+            Log.i(TAG, "saveRecording: formattedDate = $formattedDate")
+        } catch (e: Exception) {
+            Log.i(TAG, "saveRecording: error = $e")
+            formattedDate = currentTime.toString()
+        }
+
+        val filename = "Recording_${formattedDate}.txt" // TODO format this to human readable
+
+        val email = intent.extras!!.getString("email").toString()
+        val hfile = File(getExternalFilesDir(null)!!.absolutePath + "/" + email)
+        val file = File(hfile, filename)
+
+        Log.d(TAG, "saveRecording: filename = $filename")
+
+        val dataWriter: BufferedWriter
+
+        // Create file for current day and append header, if it doesn't exist yet
+        try {
+            val exists = file.exists()
+            dataWriter = BufferedWriter(OutputStreamWriter(FileOutputStream(file, true)))
+
+            if (!exists) {
+                Log.d(TAG, "saveRecording: filename doesn't exist")
+                // the header columns in here
+                formattedDate = SimpleDateFormat("dd.MM.yyyy 'at' HH:mm:ss", Locale.UK).format(Date())
+                var sensorsUsed = "# Sensors used: "
+                if(useRespeck&&useThingy) sensorsUsed += "Respeck, Thingy\n"
+                else if(useRespeck) sensorsUsed +="Respeck\n"
+                else if(useThingy) sensorsUsed +="Thingy\n"
+                dataWriter.write("# Name: $user_name\n")
+                dataWriter.write("# Date: $formattedDate\n")
+                dataWriter.write(sensorsUsed)
+                val formatter = SimpleDateFormat("HH:mm:ss", Locale.UK)
+                formatter.timeZone = TimeZone.getTimeZone("GMT")
+                dataWriter.write("# Duration: ${formatter.format(Date(time))}.\n")
+                dataWriter.newLine()
+                dataWriter.flush()
+            }
+            else {
+                Log.d(TAG, "saveRecording: filename exists")
+            }
+            dataWriter.write("# Recorded activities:\n")
+            dataWriter.write(mapToString(activity_map))
+            dataWriter.flush()
+            dataWriter.close()
+
+            activity_map.clear()
+            Toast.makeText(this, "Recording saved!", Toast.LENGTH_SHORT).show()
+
+        }
+        catch (e: IOException) {
+            Toast.makeText(this, "Error while saving recording!", Toast.LENGTH_SHORT).show()
+            Log.e(TAG, "saveRespeckRecording: Error while writing to the respeck file: " + e.message )
+        }
+    }
+
+    private fun mapToString(m: MutableMap<String, Long>) : String {
+        var s = ""
+        for(key in m.keys) {
+            val k = key.split(":")[1]
+            val formatter = SimpleDateFormat("HH:mm:ss", Locale.UK)
+            formatter.timeZone = TimeZone.getTimeZone("GMT")
+            val v = formatter.format(Date(m[key]!!))
+            if(v!="00:00:00")
+                s += "##$k : $v\n"
+        }
+        return s
+    }
+
+    private fun setupCharts() {
         respeckChart = findViewById(R.id.respeck_chart2)
         thingyChart = findViewById(R.id.thingy_chart2)
 
@@ -462,23 +578,17 @@ class RecogniseActivity : AppCompatActivity() {
         dataSet_res_accel_y.setDrawCircles(false)
         dataSet_res_accel_z.setDrawCircles(false)
 
-        dataSet_res_accel_x.setColor(
-            ContextCompat.getColor(
-                this,
-                R.color.red
-            )
+        dataSet_res_accel_x.color = ContextCompat.getColor(
+            this,
+            R.color.red
         )
-        dataSet_res_accel_y.setColor(
-            ContextCompat.getColor(
-                this,
-                R.color.green
-            )
+        dataSet_res_accel_y.color = ContextCompat.getColor(
+            this,
+            R.color.green
         )
-        dataSet_res_accel_z.setColor(
-            ContextCompat.getColor(
-                this,
-                R.color.blue
-            )
+        dataSet_res_accel_z.color = ContextCompat.getColor(
+            this,
+            R.color.blue
         )
 
         val dataSetsRes = ArrayList<ILineDataSet>()
@@ -505,23 +615,17 @@ class RecogniseActivity : AppCompatActivity() {
         dataSet_thingy_accel_y.setDrawCircles(false)
         dataSet_thingy_accel_z.setDrawCircles(false)
 
-        dataSet_thingy_accel_x.setColor(
-            ContextCompat.getColor(
-                this,
-                R.color.red
-            )
+        dataSet_thingy_accel_x.color = ContextCompat.getColor(
+            this,
+            R.color.red
         )
-        dataSet_thingy_accel_y.setColor(
-            ContextCompat.getColor(
-                this,
-                R.color.green
-            )
+        dataSet_thingy_accel_y.color = ContextCompat.getColor(
+            this,
+            R.color.green
         )
-        dataSet_thingy_accel_z.setColor(
-            ContextCompat.getColor(
-                this,
-                R.color.blue
-            )
+        dataSet_thingy_accel_z.color = ContextCompat.getColor(
+            this,
+            R.color.blue
         )
 
         val dataSetsThingy = ArrayList<ILineDataSet>()
