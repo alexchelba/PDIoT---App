@@ -413,7 +413,6 @@ class RecogniseActivity : AppCompatActivity() {
             respeckCNN.run(arrayOf(resWindow), arrayOf(resOutput))
             val thinOutput = FloatArray(nr_classes)
             thingyCNN.run(arrayOf(thinWindow), arrayOf(thinOutput))
-
             val resMaxIndex = resOutput.indices.maxBy { resOutput[it] } ?: -1
             val thinMaxIndex = thinOutput.indices.maxBy {thinOutput[it] } ?: -1
             val maxIndex = if(resOutput[resMaxIndex]>thinOutput[thinMaxIndex]) resMaxIndex else thinMaxIndex

@@ -8,11 +8,9 @@
 
     <TextView
         android:id="@+id/Signup"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="170dp"
         android:layout_marginTop="150dp"
-        android:layout_marginEnd="170dp"
         android:layout_marginBottom="25dp"
         android:text="Signup"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
