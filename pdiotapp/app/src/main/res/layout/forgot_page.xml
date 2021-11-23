@@ -39,10 +39,9 @@
 
             <TextView
                 android:id="@+id/F_EmailText"
-                android:layout_width="220dp"
+                android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
-                android:layout_weight="1"
                 android:text="E-mail:" />
 
             <EditText
@@ -67,10 +66,9 @@
 
             <TextView
                 android:id="@+id/F_PasswordText"
-                android:layout_width="220dp"
+                android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
-                android:layout_weight="1"
                 android:text="New Password:" />
 
             <EditText
@@ -94,10 +92,9 @@
 
             <TextView
                 android:id="@+id/F_ConfPasswordText"
-                android:layout_width="220dp"
+                android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
-                android:layout_weight="1"
                 android:text="Confirm New Password:" />
 
             <EditText
