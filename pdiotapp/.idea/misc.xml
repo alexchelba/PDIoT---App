@@ -3,12 +3,27 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.25833333333333336" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/drawable/ic_baseline_directions_run_24.xml" value="0.14166666666666666" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/drawable/ic_baseline_directions_walk_24.xml" value="0.14166666666666666" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/drawable/ic_baseline_man_24.xml" value="0.14166666666666666" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/drawable/ic_bluetooth_icon.xml" value="0.25833333333333336" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/drawable/ic_chevron_right.xml" value="0.25833333333333336" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/drawable/ic_ellipsis.xml" value="0.14739583333333334" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/drawable/ic_iying_down.xml" value="0.13958333333333334" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.25833333333333336" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/drawable/ic_live_data_icon.xml" value="0.25833333333333336" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/drawable/ic_recording_icon.xml" value="0.25833333333333336" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/drawable/ic_wet_floor.xml" value="0.13958333333333334" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/drawable/indicator_selected.xml" value="0.25833333333333336" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/drawable/indicator_unselected.xml" value="0.25833333333333336" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/drawable/vec_wireless_active.xml" value="0.25833333333333336" />
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_barcode.xml" value="0.12395833333333334" />
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_connecting.xml" value="0.12395833333333334" />
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_live_data.xml" value="0.12916666666666668" />
-        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_main.xml" value="0.176" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_main.xml" value="0.16799999999999998" />
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_on_boarding.xml" value="0.16" />
-        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_recognise.xml" value="0.264" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_recognise.xml" value="0.152" />
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/activity_recording.xml" value="0.136" />
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/file_item.xml" value="0.264" />
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/forgot_page.xml" value="0.176" />
@@ -19,6 +34,8 @@
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/layout/signup_page.xml" value="0.176" />
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/menu/menu_main.xml" value="0.264" />
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/menu/menu_pager.xml" value="0.152" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.25833333333333336" />
+        <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/CW3/PDIoT---App/pdiotapp/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.25833333333333336" />
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/files/pdiot-practical/pdiotapp/app/src/main/res/layout/activity_live_data.xml" value="0.2" />
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/files/pdiot-practical/pdiotapp/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/Alex/OneDrive/Desktop/Universitate/Anul 4/PDIoT/files/pdiot-practical/pdiotapp/app/src/main/res/layout/activity_on_boarding.xml" value="0.17753623188405798" />

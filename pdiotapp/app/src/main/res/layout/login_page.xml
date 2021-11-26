@@ -103,7 +103,7 @@
             android:id="@+id/ForgotButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Forgot your password?" />
+            android:text="Forgot my password" />
 
         <Button
             android:id="@+id/SignupButton"

@@ -7,30 +7,6 @@
     tools:context=".recognition.RecogniseActivity">
 
     <LinearLayout
-        android:id="@+id/respeck_graphs2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="25dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@id/thingy_graphs2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/recognise_text">
-
-        <TextView
-            android:id="@+id/Respeck"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" Respeck Live Data" />
-
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/respeck_chart2"
-            android:layout_width="match_parent"
-            android:layout_height="100dp" />
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/buttons_container2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -63,9 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="25dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@id/respeck_graphs2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recog_count_up_timer_text">
@@ -81,7 +55,7 @@
         android:id="@+id/RecogButtons"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="100dp"
         android:layout_marginBottom="50dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/buttons_container2"
@@ -109,42 +83,27 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/thingy_graphs2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="25dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/respeck_graphs2">
-
-        <TextView
-            android:id="@+id/Thingy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Thingy Live Data" />
-
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/thingy_chart2"
-            android:layout_width="match_parent"
-            android:layout_height="100dp" />
-
-    </LinearLayout>
-
     <TextView
         android:id="@+id/recog_count_up_timer_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="50dp"
         android:text="Elapsed time : "
         app:layout_constraintBottom_toTopOf="@+id/recognise_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttons_container2" />
+
+    <ImageView
+        android:id="@+id/recogImg"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recognise_text"
+        app:srcCompat="@drawable/ic_ellipsis" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,10 +7,7 @@ import android.content.IntentFilter
 import android.os.*
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
-import android.widget.ToggleButton
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
@@ -41,6 +38,8 @@ class RecogniseActivity : AppCompatActivity() {
     private lateinit var useRespeckButton: ToggleButton
     private lateinit var useThingyButton: ToggleButton
 
+    private lateinit var recogImage: ImageView
+
     private var respeckOn = false
     private var thingyOn = false
 
@@ -55,13 +54,14 @@ class RecogniseActivity : AppCompatActivity() {
     private val thingyFeatureSize = 9
 
     private val windowSize = 30
+    private val stepSize = 15
     private val nr_classes = 5
     private lateinit var respeckWindow: Array<FloatArray>
-    private lateinit var respeckWindowRow: FloatArray
+    //private lateinit var respeckWindowRow: FloatArray
     private lateinit var respeckCNN: Interpreter
 
     private lateinit var thingyWindow: Array<FloatArray>
-    private lateinit var thingyWindowRow: FloatArray
+    //private lateinit var thingyWindowRow: FloatArray
     private lateinit var thingyCNN: Interpreter
 
     private lateinit var str: String
@@ -110,18 +110,20 @@ class RecogniseActivity : AppCompatActivity() {
 
         setupViews()
         setupButtons()
-        setupCharts()
+        //setupCharts()
 
         str = "Recognition result : "
-        respeckWindowRow = FloatArray(respeckFeatureSize)
-        respeckWindow = Array(windowSize) {respeckWindowRow}
+        //respeckWindowRow = FloatArray(respeckFeatureSize)
+        respeckWindow = Array(windowSize) {FloatArray(respeckFeatureSize)} //{respeckWindowRow}
 
         respeckCNN = Interpreter(loadModelFile("model_basic.tflite"))
 
-        thingyWindowRow = FloatArray(thingyFeatureSize)
-        thingyWindow = Array(windowSize) {thingyWindowRow}
+        //thingyWindowRow = FloatArray(thingyFeatureSize)
+        thingyWindow = Array(windowSize) { FloatArray(thingyFeatureSize) }
 
         thingyCNN = Interpreter(loadModelFile("s1865457_model_thingie.tflite"))
+
+        recogImage = findViewById(R.id.recogImg)
 
         activity_map = mutableMapOf()
         user_name = intent.extras!!.getString("username").toString()
@@ -150,7 +152,7 @@ class RecogniseActivity : AppCompatActivity() {
                     val z = liveData.accelZ
 
                     time += 1
-                    updateGraph("respeck", x, y, z)
+                    //updateGraph("respeck", x, y, z)
 
                 }
             }
@@ -187,7 +189,7 @@ class RecogniseActivity : AppCompatActivity() {
                     val z = liveData.accelZ
 
                     time += 1
-                    updateGraph("thingy", x, y, z)
+                    //updateGraph("thingy", x, y, z)
 
                 }
             }
@@ -224,6 +226,7 @@ class RecogniseActivity : AppCompatActivity() {
     private fun updateData(liveData: RESpeckLiveData) {
         if (mIsRespeckRecognising) {
             resCounter+=1
+            var respeckWindowRow = FloatArray(respeckFeatureSize)
             respeckWindowRow[0]=liveData.accelX
             respeckWindowRow[1]=liveData.accelY
             respeckWindowRow[2]=liveData.accelZ
@@ -231,31 +234,42 @@ class RecogniseActivity : AppCompatActivity() {
             respeckWindowRow[4]=liveData.gyro.y
             respeckWindowRow[5]=liveData.gyro.z
             if(resCounter<windowSize) {
-                respeckWindow[resCounter-1]=respeckWindowRow
+                respeckWindow[resCounter-1]=respeckWindowRow.copyOf()
             } else
             if(resCounter==windowSize) {
-                for (i in 0..respeckWindow.size - 2)
-                    respeckWindow[i] = respeckWindow[i + 1]
-                respeckWindow[windowSize-1] = respeckWindowRow
-
+                respeckWindow[windowSize-1] = respeckWindowRow.copyOf()
                 str = predict(respeckWindow, thingyWindow)
+
+                for (i in 0..windowSize - stepSize - 1)
+                    respeckWindow[i] = respeckWindow[i + stepSize]
+
 
                 val prevValue = activity_map.getOrElse(str, { 0 })
                 activity_map.put(str, prevValue + countUpTimer.get_elapsedTime(prevTime))
                 prevTime = countUpTimer._currentTime
 
-                resCounter-=1
+                resCounter= resCounter - stepSize
             }
         }
 
         runOnUiThread {
             recogniser.text = str
+
+            when(str) {
+                "Recognition Result : Sitting/Standing" -> recogImage.setImageResource(R.drawable.ic_baseline_man_24)
+                "Recognition Result : Walking" -> recogImage.setImageResource(R.drawable.ic_baseline_directions_walk_24)
+                "Recognition Result : Running" -> recogImage.setImageResource(R.drawable.ic_baseline_directions_run_24)
+                "Recognition Result : Lying down" -> recogImage.setImageResource(R.drawable.ic_iying_down)
+                "Recognition Result : Falling" -> recogImage.setImageResource(R.drawable.ic_wet_floor)
+                else -> recogImage.setImageResource(R.drawable.ic_ellipsis)
+            }
         }
     }
 
     private fun updateData(liveData: ThingyLiveData) {
         if (mIsThingyRecognising) {
             thinCounter+=1
+            var thingyWindowRow = FloatArray(thingyFeatureSize)
             thingyWindowRow[0]=liveData.accelX
             thingyWindowRow[1]=liveData.accelY
             thingyWindowRow[2]=liveData.accelZ
@@ -267,24 +281,37 @@ class RecogniseActivity : AppCompatActivity() {
             thingyWindowRow[8]=liveData.mag.z
 
             if(thinCounter<windowSize) {
-                thingyWindow[thinCounter-1]=thingyWindowRow
-            } else
-                if(thinCounter==windowSize) {
-                    for (i in 0..thingyWindow.size - 2)
-                        thingyWindow[i] = thingyWindow[i + 1]
-                    thingyWindow[windowSize-1] = thingyWindowRow
-                    if(!useRespeck) {
-                        str = predict(respeckWindow, thingyWindow)
-                        val prevValue = activity_map.getOrElse(str, { 0 })
-                        activity_map.put(str, prevValue + countUpTimer.get_elapsedTime(prevTime))
-                        prevTime = countUpTimer._currentTime
-                    }
-                    thinCounter-=1
+                thingyWindow[thinCounter-1]=thingyWindowRow.copyOf()
+            } else if(thinCounter==windowSize) {
+
+                thingyWindow[thinCounter-1] = thingyWindowRow.copyOf()
+                if(!useRespeck) {
+                    str = predict(respeckWindow, thingyWindow)
+                    val prevValue = activity_map.getOrElse(str, { 0 })
+                    activity_map.put(str, prevValue + countUpTimer.get_elapsedTime(prevTime))
+                    prevTime = countUpTimer._currentTime
+
                 }
+                if (thinCounter == windowSize) {
+                    for (i in 0..thingyWindow.size - stepSize - 1)
+                        thingyWindow[i] = thingyWindow[i + stepSize]
+                    thingyWindow[windowSize - stepSize] = thingyWindowRow
+
+                    thinCounter -= stepSize
+                }
+            }
         }
         if(!useRespeck) {
             runOnUiThread {
                 recogniser.text = str
+                when(str) {
+                    "Recognition Result : Sitting/Standing" -> recogImage.setImageResource(R.drawable.ic_baseline_man_24)
+                    "Recognition Result : Walking" -> recogImage.setImageResource(R.drawable.ic_baseline_directions_walk_24)
+                    "Recognition Result : Running" -> recogImage.setImageResource(R.drawable.ic_baseline_directions_run_24)
+                    "Recognition Result : Lying down" -> recogImage.setImageResource(R.drawable.ic_iying_down)
+                    "Recognition Result : Falling" -> recogImage.setImageResource(R.drawable.ic_wet_floor)
+                    else -> recogImage.setImageResource(R.drawable.ic_ellipsis)
+                }
             }
         }
     }
@@ -381,23 +408,23 @@ class RecogniseActivity : AppCompatActivity() {
     }
 
     private fun stopRecognising() {
-
+        val prevValue = activity_map.getOrElse(str, {0})
+        activity_map[str] = prevValue + countUpTimer.get_elapsedTime(prevTime)
         countUpTimer.stop()
         val totalTime = countUpTimer._currentTime - initialTime
         countUpTimer.reset()
         prevTime = 0
         val s = "Elapsed time : "
         timer.text = s
-
         str = "Recognition Result : "
-        respeckWindowRow = FloatArray(respeckFeatureSize)
-        respeckWindow = Array(windowSize){respeckWindowRow}
+        //respeckWindowRow = FloatArray(respeckFeatureSize)
+        respeckWindow = Array(windowSize) {FloatArray(respeckFeatureSize)}
         //Log.d(TAG, "stopRecognising " + respeckWindow.size)
         mIsRespeckRecognising = false
         resCounter=0
 
-        thingyWindowRow = FloatArray(thingyFeatureSize)
-        thingyWindow = Array(windowSize){thingyWindowRow}
+        //thingyWindowRow = FloatArray(thingyFeatureSize)
+        thingyWindow = Array(windowSize){ FloatArray(thingyFeatureSize) }
         //Log.d(TAG, "stopRecognising " + respeckWindow.size)
         mIsThingyRecognising = false
         thinCounter=0
@@ -424,6 +451,7 @@ class RecogniseActivity : AppCompatActivity() {
         } else {
             if (useRespeck) {
                 val output = FloatArray(nr_classes)
+                Log.d(TAG, "Respeck Window : " + Arrays.deepToString(arrayOf(resWindow)))
                 respeckCNN.run(arrayOf(resWindow), arrayOf(output))
                 val maxIndex = output.indices.maxBy { output[it] }
                 Log.d(TAG, "trainRecognising: most probable  " + Arrays.toString(output))
@@ -558,6 +586,7 @@ class RecogniseActivity : AppCompatActivity() {
         return s
     }
 
+    /*
     private fun setupCharts() {
         respeckChart = findViewById(R.id.respeck_chart2)
         thingyChart = findViewById(R.id.thingy_chart2)
@@ -668,6 +697,8 @@ class RecogniseActivity : AppCompatActivity() {
         }
 
     }
+
+     */
 
     override fun onDestroy() {
         super.onDestroy()
