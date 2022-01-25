@@ -15,6 +15,7 @@ import com.specknet.pdiotapp.utils.FileOpen
 
 class FileRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    // list of files in the recycler view
     private lateinit var listFiles : MutableList<File>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -34,15 +35,28 @@ class FileRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
+    /**
+     * This method is to get the number of files in the list
+     * @return integer
+     */
     override fun getItemCount(): Int {
         return listFiles.size
     }
 
+    /**
+     * This method is to receive updated file list
+     * @param files
+     */
     fun submitList(files : MutableList<File>) {
         listFiles = files
         notifyDataSetChanged()
     }
 
+    /**
+     * This method is to remove item at given position
+     * @param id
+     * @return boolean
+     */
     fun removeItem(id : Int) : Boolean {
         listFiles.removeAt(id)
         notifyItemRemoved(id)
@@ -62,6 +76,10 @@ class FileRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             txtTitle = itemView.findViewById(R.id.fileItem)
         }
 
+        /**
+         * This method is to add open functionality to short press on a file
+         * @param view
+         */
         override fun onClick(v: View) {
             val context = itemView.context
             val showContent = Intent(context, FileOpen::class.java)
@@ -70,6 +88,11 @@ class FileRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             context.startActivity(showContent)
         }
 
+        /**
+         * This method is to add delete functionality to long press on a file
+         * @param view
+         * @return boolean
+         */
         override fun onLongClick(v: View):Boolean {
 
             val context = itemView.context
@@ -91,6 +114,10 @@ class FileRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             return true
         }
 
+        /**
+         * This method is to attach the file to its link
+         * @param file
+         */
         fun bindFile(file: File) {
             this.filepath = file
             txtTitle.text = file.name

@@ -22,6 +22,9 @@ class FileViewer : AppCompatActivity() {
         addData()
     }
 
+    /**
+     * This method is to initialize the recycler view for files and its adapter
+     */
     private fun initRecyclerView() {
         fileRecycler = findViewById(R.id.fileRecyclerViewer)
         fileRecycler.layoutManager = LinearLayoutManager(this@FileViewer)
@@ -29,6 +32,9 @@ class FileViewer : AppCompatActivity() {
         fileRecycler.adapter = fileAdapter
     }
 
+    /**
+     * This method is to send file data to the recycler view's list
+     */
     private fun addData() {
         val email = intent.extras!!.getString("email").toString()
         val hfile = File(getExternalFilesDir(null)!!.absolutePath + "/" + email)

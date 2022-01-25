@@ -9,12 +9,6 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.specknet.pdiotapp.R
 import com.specknet.pdiotapp.utils.Constants
 import com.specknet.pdiotapp.utils.CountUpTimer
@@ -26,7 +20,6 @@ import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class RecogniseActivity : AppCompatActivity() {
@@ -57,35 +50,16 @@ class RecogniseActivity : AppCompatActivity() {
     private val stepSize = 15
     private val nr_classes = 5
     private lateinit var respeckWindow: Array<FloatArray>
-    //private lateinit var respeckWindowRow: FloatArray
     private lateinit var respeckCNN: Interpreter
 
     private lateinit var thingyWindow: Array<FloatArray>
-    //private lateinit var thingyWindowRow: FloatArray
     private lateinit var thingyCNN: Interpreter
 
     private lateinit var str: String
     private var resCounter = 0
     private var thinCounter = 0
 
-
-
-    // global graph variables
-    private lateinit var dataSet_res_accel_x: LineDataSet
-    private lateinit var dataSet_res_accel_y: LineDataSet
-    private lateinit var dataSet_res_accel_z: LineDataSet
-
-    private lateinit var dataSet_thingy_accel_x: LineDataSet
-    private lateinit var dataSet_thingy_accel_y: LineDataSet
-    private lateinit var dataSet_thingy_accel_z: LineDataSet
-
-
     private var time = 0f
-    private lateinit var allRespeckData: LineData
-    private lateinit var allThingyData: LineData
-
-    private lateinit var respeckChart: LineChart
-    private lateinit var thingyChart: LineChart
 
     // global broadcast receiver so we can unregister it
     private lateinit var respeckLiveUpdateReceiver: BroadcastReceiver
@@ -110,15 +84,12 @@ class RecogniseActivity : AppCompatActivity() {
 
         setupViews()
         setupButtons()
-        //setupCharts()
 
         str = "Recognition result : "
-        //respeckWindowRow = FloatArray(respeckFeatureSize)
         respeckWindow = Array(windowSize) {FloatArray(respeckFeatureSize)} //{respeckWindowRow}
 
         respeckCNN = Interpreter(loadModelFile("model_basic.tflite"))
 
-        //thingyWindowRow = FloatArray(thingyFeatureSize)
         thingyWindow = Array(windowSize) { FloatArray(thingyFeatureSize) }
 
         thingyCNN = Interpreter(loadModelFile("s1865457_model_thingie.tflite"))
@@ -146,13 +117,8 @@ class RecogniseActivity : AppCompatActivity() {
 
                     respeckOn = true
 
-                    // get all relevant intent contents
-                    val x = liveData.accelX
-                    val y = liveData.accelY
-                    val z = liveData.accelZ
 
                     time += 1
-                    //updateGraph("respeck", x, y, z)
 
                 }
             }
@@ -182,14 +148,7 @@ class RecogniseActivity : AppCompatActivity() {
                     updateData(liveData)
 
                     thingyOn = true
-
-                    // get all relevant intent contents
-                    val x = liveData.accelX
-                    val y = liveData.accelY
-                    val z = liveData.accelZ
-
                     time += 1
-                    //updateGraph("thingy", x, y, z)
 
                 }
             }
@@ -203,7 +162,6 @@ class RecogniseActivity : AppCompatActivity() {
         this.registerReceiver(thingyLiveUpdateReceiver, filterTestThingy, null, handlerThingy)
 
         timer = findViewById(R.id.recog_count_up_timer_text)
-        //timer.visibility = View.INVISIBLE
 
         countUpTimer = object: CountUpTimer(1000) {
             override fun onTick(elapsedTime: Long) {
@@ -218,11 +176,18 @@ class RecogniseActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * This method is to setup views
+     */
     private fun setupViews() {
         recogniser = findViewById(R.id.recogniser)
         recogniser.visibility = View.VISIBLE
     }
 
+    /**
+     * This method is to update data for respeck
+     * @param liveData
+     */
     private fun updateData(liveData: RESpeckLiveData) {
         if (mIsRespeckRecognising) {
             resCounter+=1
@@ -266,6 +231,10 @@ class RecogniseActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * This method is to update data for Thingy
+     * @param liveData
+     */
     private fun updateData(liveData: ThingyLiveData) {
         if (mIsThingyRecognising) {
             thinCounter+=1
@@ -316,16 +285,27 @@ class RecogniseActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * This method is to enable a view
+     * @param view
+     */
     private fun enableView(view: View) {
         view.isClickable = true
         view.isEnabled = true
     }
 
+    /**
+     * This method is to disable a view
+     * @param view
+     */
     private fun disableView(view: View) {
         view.isClickable = false
         view.isEnabled = false
     }
 
+    /**
+     * This method is to set up button's functionalities
+     */
     private fun setupButtons() {
         startRecognisingButton = findViewById(R.id.start_recognising_button)
         stopRecognisingButton = findViewById(R.id.stop_recognising_button)
@@ -398,6 +378,9 @@ class RecogniseActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * This method is to define what happens when the start button is pressed
+     */
     private fun startRecognising() {
 
         countUpTimer.start()
@@ -407,6 +390,9 @@ class RecogniseActivity : AppCompatActivity() {
         mIsThingyRecognising = useThingy
     }
 
+    /**
+     * This method is to define what happens when the stop button is pressed
+     */
     private fun stopRecognising() {
         val prevValue = activity_map.getOrElse(str, {0})
         activity_map[str] = prevValue + countUpTimer.get_elapsedTime(prevTime)
@@ -417,15 +403,11 @@ class RecogniseActivity : AppCompatActivity() {
         val s = "Elapsed time : "
         timer.text = s
         str = "Recognition Result : "
-        //respeckWindowRow = FloatArray(respeckFeatureSize)
         respeckWindow = Array(windowSize) {FloatArray(respeckFeatureSize)}
-        //Log.d(TAG, "stopRecognising " + respeckWindow.size)
         mIsRespeckRecognising = false
         resCounter=0
 
-        //thingyWindowRow = FloatArray(thingyFeatureSize)
         thingyWindow = Array(windowSize){ FloatArray(thingyFeatureSize) }
-        //Log.d(TAG, "stopRecognising " + respeckWindow.size)
         mIsThingyRecognising = false
         thinCounter=0
 
@@ -433,6 +415,11 @@ class RecogniseActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * This method is to predict the activity the user is doing based on data
+     * @param resWindow
+     * @param thinWindow
+     */
     private fun predict(resWindow : Array<FloatArray>, thinWindow: Array<FloatArray>): String {
         if (useRespeck && useThingy) {
 
@@ -470,6 +457,11 @@ class RecogniseActivity : AppCompatActivity() {
         return "Recognition Result : "
     }
 
+    /**
+     * This method is to load a tflite model in Android
+     * @param tflite
+     * @return MappedByteBuffer
+     */
     @Throws(IOException::class)
     private fun loadModelFile(tflite : String): MappedByteBuffer {
         val MODEL_ASSETS_PATH = tflite
@@ -481,6 +473,11 @@ class RecogniseActivity : AppCompatActivity() {
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startoffset, declaredLength)
     }
 
+    /**
+     * This method is to associate label to output
+     * @param i
+     * @return string
+     */
     private fun mapOutputtoLabel(i: Int) : String {
         when (i) {
             0 -> return "Sitting/Standing"
@@ -488,30 +485,14 @@ class RecogniseActivity : AppCompatActivity() {
             2 -> return "Running"
             3 -> return "Lying down"
             4 -> return "Falling"
-            /*
-            0 -> return "Sitting"
-            1 -> return "Climbing stairs"
-            2 -> return "Running"
-            3 -> return "Walking at normal speed"
-            4 -> return "Falling on the back"
-            5 -> return "Sitting bent forward"
-            6 -> return "Sitting bent backward"
-            7 -> return "Lying down on the back"
-            8 -> return "Desk work"
-            9 -> return "Falling on knees"
-            10 -> return "Lying down on stomach"
-            11 -> return "Movement"
-            12 -> return "Lying down left"
-            13 -> return "Lying down right"
-            14 -> return "Descending stairs"
-            15 -> return "Standing"
-            16 -> return "Falling on the left"
-            17 -> return "Falling on the right"
-             */
         }
         return ""
     }
 
+    /**
+     * This method is to save a recording
+     * @param time
+     */
     private fun saveRecording(time : Long) {
         val currentTime = System.currentTimeMillis()
         var formattedDate = ""
@@ -573,6 +554,11 @@ class RecogniseActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * This method is to prepare data to be written in a file
+     * @param m
+     * @return string
+     */
     private fun mapToString(m: MutableMap<String, Long>) : String {
         var s = ""
         for(key in m.keys) {
@@ -586,120 +572,9 @@ class RecogniseActivity : AppCompatActivity() {
         return s
     }
 
-    /*
-    private fun setupCharts() {
-        respeckChart = findViewById(R.id.respeck_chart2)
-        thingyChart = findViewById(R.id.thingy_chart2)
-
-        // Respeck
-
-        time = 0f
-        val entries_res_accel_x = ArrayList<Entry>()
-        val entries_res_accel_y = ArrayList<Entry>()
-        val entries_res_accel_z = ArrayList<Entry>()
-
-        dataSet_res_accel_x = LineDataSet(entries_res_accel_x, "Accel X")
-        dataSet_res_accel_y = LineDataSet(entries_res_accel_y, "Accel Y")
-        dataSet_res_accel_z = LineDataSet(entries_res_accel_z, "Accel Z")
-
-        dataSet_res_accel_x.setDrawCircles(false)
-        dataSet_res_accel_y.setDrawCircles(false)
-        dataSet_res_accel_z.setDrawCircles(false)
-
-        dataSet_res_accel_x.color = ContextCompat.getColor(
-            this,
-            R.color.red
-        )
-        dataSet_res_accel_y.color = ContextCompat.getColor(
-            this,
-            R.color.green
-        )
-        dataSet_res_accel_z.color = ContextCompat.getColor(
-            this,
-            R.color.blue
-        )
-
-        val dataSetsRes = ArrayList<ILineDataSet>()
-        dataSetsRes.add(dataSet_res_accel_x)
-        dataSetsRes.add(dataSet_res_accel_y)
-        dataSetsRes.add(dataSet_res_accel_z)
-
-        allRespeckData = LineData(dataSetsRes)
-        respeckChart.data = allRespeckData
-        respeckChart.invalidate()
-
-        // Thingy
-
-        time = 0f
-        val entries_thingy_accel_x = ArrayList<Entry>()
-        val entries_thingy_accel_y = ArrayList<Entry>()
-        val entries_thingy_accel_z = ArrayList<Entry>()
-
-        dataSet_thingy_accel_x = LineDataSet(entries_thingy_accel_x, "Accel X")
-        dataSet_thingy_accel_y = LineDataSet(entries_thingy_accel_y, "Accel Y")
-        dataSet_thingy_accel_z = LineDataSet(entries_thingy_accel_z, "Accel Z")
-
-        dataSet_thingy_accel_x.setDrawCircles(false)
-        dataSet_thingy_accel_y.setDrawCircles(false)
-        dataSet_thingy_accel_z.setDrawCircles(false)
-
-        dataSet_thingy_accel_x.color = ContextCompat.getColor(
-            this,
-            R.color.red
-        )
-        dataSet_thingy_accel_y.color = ContextCompat.getColor(
-            this,
-            R.color.green
-        )
-        dataSet_thingy_accel_z.color = ContextCompat.getColor(
-            this,
-            R.color.blue
-        )
-
-        val dataSetsThingy = ArrayList<ILineDataSet>()
-        dataSetsThingy.add(dataSet_thingy_accel_x)
-        dataSetsThingy.add(dataSet_thingy_accel_y)
-        dataSetsThingy.add(dataSet_thingy_accel_z)
-
-        allThingyData = LineData(dataSetsThingy)
-        thingyChart.data = allThingyData
-        thingyChart.invalidate()
-
-    }
-
-    fun updateGraph(graph: String, x: Float, y: Float, z: Float) {
-        // take the first element from the queue
-        // and update the graph with it
-        if (graph == "respeck") {
-            dataSet_res_accel_x.addEntry(Entry(time, x))
-            dataSet_res_accel_y.addEntry(Entry(time, y))
-            dataSet_res_accel_z.addEntry(Entry(time, z))
-
-            runOnUiThread {
-                allRespeckData.notifyDataChanged()
-                respeckChart.notifyDataSetChanged()
-                respeckChart.invalidate()
-                respeckChart.setVisibleXRangeMaximum(150f)
-                respeckChart.moveViewToX(respeckChart.lowestVisibleX + 40)
-            }
-        } else if (graph == "thingy") {
-            dataSet_thingy_accel_x.addEntry(Entry(time, x))
-            dataSet_thingy_accel_y.addEntry(Entry(time, y))
-            dataSet_thingy_accel_z.addEntry(Entry(time, z))
-
-            runOnUiThread {
-                allThingyData.notifyDataChanged()
-                thingyChart.notifyDataSetChanged()
-                thingyChart.invalidate()
-                thingyChart.setVisibleXRangeMaximum(150f)
-                thingyChart.moveViewToX(thingyChart.lowestVisibleX + 40)
-            }
-        }
-
-    }
-
+    /**
+     * This method is to destroy sensor connection
      */
-
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(respeckLiveUpdateReceiver)

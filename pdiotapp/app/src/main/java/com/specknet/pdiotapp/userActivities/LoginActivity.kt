@@ -12,9 +12,6 @@ import com.specknet.pdiotapp.MainActivity
 import com.specknet.pdiotapp.R
 import com.specknet.pdiotapp.loginHelpers.InputValidation
 import com.specknet.pdiotapp.userDatabase.DatabaseHelper
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
 
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
@@ -117,23 +114,24 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
      */
     private fun verifyFromSQLite() {
 
-        if (!inputValidation.isInputEditTextFilled(textInputEditTextEmail, textInputLayoutEmail, "Please enter your e-mail")) {
+        if (!inputValidation.isInputEditTextFilled(textInputEditTextEmail)) {
             hideKeyboardFrom(textInputLayoutEmail)
             Toast.makeText(this, "Wrong e-mail or password", Toast.LENGTH_SHORT).show()
             return
         }
-        if (!inputValidation.isInputEditTextEmail(textInputEditTextEmail, textInputLayoutEmail, "Please enter a valid e-mail")) {
+        if (!inputValidation.isInputEditTextEmail(textInputEditTextEmail)) {
             hideKeyboardFrom(textInputLayoutEmail)
             Toast.makeText(this, "Wrong e-mail or password", Toast.LENGTH_SHORT).show()
             return
         }
-        if (!inputValidation.isInputEditTextFilled(textInputEditTextPassword, textInputLayoutPassword, "Wrong password")) {
+        if (!inputValidation.isInputEditTextFilled(textInputEditTextPassword)) {
             hideKeyboardFrom(textInputLayoutEmail)
             Toast.makeText(this, "Wrong e-mail or password", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if (databaseHelper.checkUser(textInputEditTextEmail.text.toString().trim { it <= ' ' }, textInputEditTextPassword.text.toString().trim { it <= ' ' })) {
+        if (databaseHelper.checkUser(textInputEditTextEmail.text.toString().trim { it <= ' ' },
+                                    textInputEditTextPassword.text.toString().trim { it <= ' ' })) {
 
             val user = databaseHelper.getUser(textInputEditTextEmail.text.toString().trim { it <= ' ' })
             val name = user.username
@@ -169,6 +167,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         textInputEditTextPassword.text = null
     }
 
+    /**
+     * This method is to hide keyboard away from user
+     * @param view
+     */
     private fun hideKeyboardFrom(view: View) {
         val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)

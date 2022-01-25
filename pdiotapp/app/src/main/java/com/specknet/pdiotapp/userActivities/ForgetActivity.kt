@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
-import com.specknet.pdiotapp.userModel.UserModel
 
 import android.view.inputmethod.InputMethodManager
 
@@ -108,23 +107,22 @@ class ForgetActivity : AppCompatActivity(), View.OnClickListener {
      */
     private fun postDataToSQLite() {
 
-        if (!inputValidation.isInputEditTextFilled(textInputEditTextEmail, textInputLayoutEmail,"Please enter your email")) {
+        if (!inputValidation.isInputEditTextFilled(textInputEditTextEmail)) {
             hideKeyboardFrom(textInputLayoutEmail)
             Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
             return
         }
-        if (!inputValidation.isInputEditTextEmail(textInputEditTextEmail, textInputLayoutEmail, "Please enter your email")) {
+        if (!inputValidation.isInputEditTextEmail(textInputEditTextEmail)) {
             hideKeyboardFrom(textInputLayoutEmail)
             Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
             return
         }
-        if (!inputValidation.isInputEditTextFilled(textInputEditTextPassword, textInputLayoutPassword, "Please enter your password")) {
+        if (!inputValidation.isInputEditTextFilled(textInputEditTextPassword)) {
             hideKeyboardFrom(textInputLayoutEmail)
             Toast.makeText(this, "Please enter your new password", Toast.LENGTH_SHORT).show()
             return
         }
-        if (!inputValidation.isInputEditTextMatches(textInputEditTextPassword, textInputEditTextConfirmPassword,
-                textInputLayoutConfirmPassword, "Passwords do not match")) {
+        if (!inputValidation.isInputEditTextMatches(textInputEditTextPassword, textInputEditTextConfirmPassword)) {
             hideKeyboardFrom(textInputLayoutEmail)
             Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
             return
@@ -157,6 +155,10 @@ class ForgetActivity : AppCompatActivity(), View.OnClickListener {
         textInputEditTextConfirmPassword.text = null
     }
 
+    /**
+     * This method is to hide keyboard away from screen
+     * @param view
+     */
     private fun hideKeyboardFrom(view: View) {
         val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)

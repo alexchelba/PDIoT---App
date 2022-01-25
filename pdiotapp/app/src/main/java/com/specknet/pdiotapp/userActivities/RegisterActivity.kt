@@ -98,7 +98,6 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
 
     /**
      * This implemented method is to listen the click on view
-     *
      * @param v
      */
     override fun onClick(v: View) {
@@ -114,28 +113,27 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
      * This method is to validate the input text fields and post data to SQLite
      */
     private fun postDataToSQLite() {
-        if (!inputValidation.isInputEditTextFilled(textInputEditTextName, textInputLayoutName,"Please enter your name")) {
+        if (!inputValidation.isInputEditTextFilled(textInputEditTextName)) {
             hideKeyboardFrom(textInputLayoutEmail)
             Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show()
             return
         }
-        if (!inputValidation.isInputEditTextFilled(textInputEditTextEmail, textInputLayoutEmail,"Please enter your email")) {
+        if (!inputValidation.isInputEditTextFilled(textInputEditTextEmail)) {
             hideKeyboardFrom(textInputLayoutEmail)
             Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
             return
         }
-        if (!inputValidation.isInputEditTextEmail(textInputEditTextEmail, textInputLayoutEmail, "Please enter a valid email")) {
+        if (!inputValidation.isInputEditTextEmail(textInputEditTextEmail)) {
             hideKeyboardFrom(textInputLayoutEmail)
             Toast.makeText(this, "Please enter a valid email", Toast.LENGTH_SHORT).show()
             return
         }
-        if (!inputValidation.isInputEditTextFilled(textInputEditTextPassword, textInputLayoutPassword, "Please enter your password")) {
+        if (!inputValidation.isInputEditTextFilled(textInputEditTextPassword)) {
             hideKeyboardFrom(textInputLayoutEmail)
             Toast.makeText(this, "Please enter your password", Toast.LENGTH_SHORT).show()
             return
         }
-        if (!inputValidation.isInputEditTextMatches(textInputEditTextPassword, textInputEditTextConfirmPassword,
-                textInputLayoutConfirmPassword, "Passwords do not match")) {
+        if (!inputValidation.isInputEditTextMatches(textInputEditTextPassword, textInputEditTextConfirmPassword)) {
             hideKeyboardFrom(textInputLayoutEmail)
             Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
             return
@@ -179,6 +177,10 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         textInputEditTextConfirmPassword.text = null
     }
 
+    /**
+     * This method is to hide keyboard away from user
+     * @param view
+     */
     private fun hideKeyboardFrom(view: View) {
         val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)

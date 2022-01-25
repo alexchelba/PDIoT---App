@@ -39,6 +39,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
      *
      * @return list
      */
+    /*
     fun getAllUser(): List<UserModel> {
 
         // array of columns to fetch
@@ -73,6 +74,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
         return userList
     }
+     */
 
 
     /**
@@ -122,6 +124,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
      *
      * @param user
      */
+    /*
     fun updateUserSesh(user: UserModel, logged : Boolean) {
         val db = this.writableDatabase
 
@@ -136,7 +139,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             arrayOf(user.id.toString()))
         db.close()
     }
+     */
 
+    /**
+     * This method is to update user's password record
+     * @param user
+     * @param pass
+     */
     fun updateUserPass(user: UserModel, pass : String) {
         val db = this.writableDatabase
 
@@ -156,6 +165,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
      *
      * @param user
      */
+    /*
     fun deleteUser(user: UserModel) {
 
         val db = this.writableDatabase
@@ -166,6 +176,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
 
     }
+     */
 
     /**
      * This method to check user exist or not
