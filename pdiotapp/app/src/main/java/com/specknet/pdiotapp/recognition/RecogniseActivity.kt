@@ -88,11 +88,11 @@ class RecogniseActivity : AppCompatActivity() {
         str = "Recognition result : "
         respeckWindow = Array(windowSize) {FloatArray(respeckFeatureSize)} //{respeckWindowRow}
 
-        respeckCNN = Interpreter(loadModelFile("model_basic.tflite"))
+        respeckCNN = Interpreter(loadModelFile("cnn_model_respeck.tflite"))
 
         thingyWindow = Array(windowSize) { FloatArray(thingyFeatureSize) }
 
-        thingyCNN = Interpreter(loadModelFile("s1865457_model_thingie.tflite"))
+        thingyCNN = Interpreter(loadModelFile("cnn_model_thingie.tflite"))
 
         recogImage = findViewById(R.id.recogImg)
 
