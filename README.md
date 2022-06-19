@@ -2,4 +2,4 @@
 This repo hosts the Android code for a Human Activity Recognition application. I teamed up with 2 other students, and while they developed the Machine Learning models, I worked on the Android development. We had to make use of two sensors: Respeck and Thingy.
 We received a basic Android application, which allowed us to connect to the sensors, collect data with them and watch the live processing of sensor data on a graph. We were tasked with developing it further. The main feature we had to build was a real-time activity recognition system. Any other additional features were a bonus which contributed to higher mark for the technical side.
 The final version of the app features a login system and a live activity recognition system. The users can also view past activity sessions - the app saves information of each time the live activity recognition system is used.
-The installation and user guide describes the features in detail. The report is technical - everything about implementation is in there.
+The installation and user guide describes the added features in detail. The report is technical - everything about implementation is in there.
